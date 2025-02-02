@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback } from "react";
 
 import Places from "./components/Places.jsx";
 import Modal from "./components/Modal.jsx";
@@ -20,9 +20,8 @@ function App() {
     isFetching,
     fetchedData: userPlaces,
     error,
-    setFetchedData:setUserPlaces
+    setFetchedData: setUserPlaces,
   } = useFetch(fetchUserPlaces, []);
-
 
   function handleStartRemovePlace(place) {
     setModalIsOpen(true);
@@ -51,7 +50,7 @@ function App() {
     } catch (error) {
       setUserPlaces(userPlaces);
       setErrorUpdatingPlaces({
-        message: error.message || 'Failed to update places.',
+        message: error.message || "Failed to update places.",
       });
     }
   }
@@ -71,13 +70,13 @@ function App() {
       } catch (error) {
         setUserPlaces(userPlaces);
         setErrorUpdatingPlaces({
-          message: error.message || 'Failed to delete place.',
+          message: error.message || "Failed to delete place.",
         });
       }
 
       setModalIsOpen(false);
     },
-    [userPlaces]
+    [userPlaces, setUserPlaces]
   );
 
   function handleError() {
@@ -86,26 +85,20 @@ function App() {
 
   return (
     <>
-      <Modal
-        open={errorUpdatingPlaces}
-        // onClose={handleError}
-      >
+      <Modal open={errorUpdatingPlaces} onClose={handleError}>
         {errorUpdatingPlaces && (
           <Error
             title="An error occurred!"
             message={errorUpdatingPlaces.message}
-            // onConfirm={handleError}
+            onConfirm={handleError}
           />
         )}
       </Modal>
 
-      <Modal
-        open={modalIsOpen}
-        //  onClose={handleStopRemovePlace}
-      >
+      <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
-        // onCancel={handleStopRemovePlace}
-        // onConfirm={handleRemovePlace}
+          onCancel={handleStopRemovePlace}
+          onConfirm={handleRemovePlace}
         />
       </Modal>
 
@@ -126,13 +119,11 @@ function App() {
             isLoading={isFetching}
             loadingText="Fetching your places..."
             places={userPlaces}
-            // onSelectPlace={handleStartRemovePlace}
+            onSelectPlace={handleStartRemovePlace}
           />
         )}
 
-        <AvailablePlaces
-        //  onSelectPlace={handleSelectPlace}
-        />
+        <AvailablePlaces onSelectPlace={handleSelectPlace} />
       </main>
     </>
   );
