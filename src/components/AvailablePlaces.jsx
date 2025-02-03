@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-
 import Places from "./Places.jsx";
 import Error from "./Error.jsx";
 import { sortPlacesByDistance } from "../loc.js";
@@ -32,8 +30,7 @@ export default function AvailablePlaces({ onSelectPlace }) {
     isFetching,
     fetchedData: availablePlaces,
     error,
-    setFetchedData: setAvailablePlaces,
-  } = useFetch(fetchAvailablePlaces, []);
+  } = useFetch(fetchSortedPlaces, []);
 
   if (error) {
     return <Error title="An error occurred!" message={error.message} />;
