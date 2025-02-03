@@ -6,16 +6,23 @@ import { sortPlacesByDistance } from "../loc.js";
 import { fetchAvailablePlaces } from "../http.js";
 import { useFetch } from "../hooks/useFetch.js";
 
+async function fetchSortedPlaces() {
+  const places = await fetchAvailablePlaces();
 
-navigator.geolocation.getCurrentPosition((position) => {
-  const sortedPlaces = sortPlacesByDistance(
-    places,
-    position.coords.latitude,
-    position.coords.longitude
-  );
-  setAvailablePlaces(sortedPlaces);
-  setIsFetching(false);
-});
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const sortedPlaces = sortPlacesByDistance(
+        places,
+        position.coords.latitude,
+        position.coords.longitude
+      );
+      resolve(sortedPlaces);
+      // setAvailablePlaces(sortedPlaces);
+      // setIsFetching(false);
+    });
+  });
+}
+
 export default function AvailablePlaces({ onSelectPlace }) {
   // const [isFetching, setIsFetching] = useState(false);
   // const [availablePlaces, setAvailablePlaces] = useState([]);
@@ -26,8 +33,7 @@ export default function AvailablePlaces({ onSelectPlace }) {
     fetchedData: availablePlaces,
     error,
     setFetchedData: setAvailablePlaces,
-  } = useFetch(fetchUserPlaces, []);
-  
+  } = useFetch(fetchAvailablePlaces, []);
 
   if (error) {
     return <Error title="An error occurred!" message={error.message} />;
