@@ -15,8 +15,7 @@ async function fetchSortedPlaces() {
         position.coords.longitude
       );
       resolve(sortedPlaces);
-      // setAvailablePlaces(sortedPlaces);
-      // setIsFetching(false);
+     
     });
   });
 }
